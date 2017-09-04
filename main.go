@@ -4,6 +4,7 @@ package main
 
 import (
 	"github.com/avallario/gohlmap/mapio"
+	"github.com/avallario/gohlmap/maptree"
 	"os"
 )
 
@@ -23,18 +24,15 @@ func main() {
 
 	hlmap := parser.Parse()
 
-	hlmap.Shift(0, 0, 320)
+	entity, err2 := hlmap.FindEntityNamed("rail")
+	check(err2)
+
+	err3 := hlmap.MoveEntityToWorld(entity)
+	check(err3)
+
+	//	hlmap.Shift(0, 0, 320)
 
 	mapio.ExportMap(hlmap, "output.map")
 
-	//	maptree.PrintHLMap(hlmap)
-
-	/*
-		t := mapio.Token{-1, "Token init"}
-		for t.Kind != mapio.EOF {
-			t, err = scanner.Scan()
-			check(err)
-			fmt.Printf("%v\t<%v>\n", mapio.KindName(t.Kind), t.Spelling)
-		}
-	*/
+	maptree.PrintHLMap(hlmap)
 }

@@ -39,6 +39,8 @@ func (p *parser) Parse() *maptree.HLMap {
 		hlmap.Entitylist = append(hlmap.Entitylist, p.parseEntity())
 	}
 
+	hlmap.FindWorldspawn()
+
 	return hlmap
 }
 

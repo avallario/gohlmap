@@ -98,6 +98,7 @@
 }
 {
 "classname" "func_wall"
+"targetname" "rail"
 "angles" "0 0 0"
 "rendercolor" "0 0 0"
 "rendermode" "4"

@@ -5,6 +5,14 @@ import (
 	"math/big"
 )
 
+type treeError struct {
+	msg string
+}
+
+func (t treeError) Error() string {
+	return "Tree operation error: " + t.msg
+}
+
 // ---------- Face class definition ----------
 
 type Face struct {
@@ -91,12 +99,55 @@ func (e *Entity) Copy() *Entity {
 
 type HLMap struct {
 	Entitylist []*Entity
+	worldspawn *Entity
 }
 
 func (q *HLMap) Shift(dx, dy, dz int) {
 	for _, e := range q.Entitylist {
 		e.Shift(dx, dy, dz)
 	}
+}
+
+func (q *HLMap) MoveEntityToWorld(e *Entity) error {
+	ws := q.Worldspawn()
+
+	if ws == nil {
+		return treeError{"HLMap has no identified worldspawn (call .FindWorldspawn())"}
+	}
+
+	found_entity := false
+	entity_index := -1
+
+	for i, entity := range q.Entitylist {
+		if e == entity {
+			found_entity = true
+			entity_index = i
+			break
+		}
+	}
+
+	if found_entity {
+		ws.Brushlist = append(ws.Brushlist, e.Brushlist...)
+
+		copy(q.Entitylist[entity_index:], q.Entitylist[entity_index+1:])
+		q.Entitylist[len(q.Entitylist)-1] = nil
+		q.Entitylist = q.Entitylist[:len(q.Entitylist)-1]
+
+		return nil
+	} else {
+		return treeError{"Could not find specified entity in map object"}
+	}
+}
+
+func (q *HLMap) FindEntityNamed(name string) (*Entity, error) {
+	for _, entity := range q.Entitylist {
+		for k, v := range entity.Properties {
+			if k == "targetname" && v == name {
+				return entity, nil
+			}
+		}
+	}
+	return nil, treeError{"Could not find entity with specified name in map object"}
 }
 
 func (q *HLMap) Copy() *HLMap {
@@ -109,14 +160,42 @@ func (q *HLMap) Copy() *HLMap {
 	return new_hlmap
 }
 
+func (q *HLMap) FindWorldspawn() error {
+	found_worldspawn := false
+
+	for _, entity := range q.Entitylist {
+		for k, v := range entity.Properties {
+			if k == "classname" && v == "worldspawn" {
+				found_worldspawn = true
+				q.worldspawn = entity
+				break
+			}
+		}
+
+		if found_worldspawn {
+			break
+		}
+	}
+
+	if found_worldspawn {
+		return nil
+	} else {
+		return treeError{"Unable to find worldspawn"}
+	}
+}
+
+func (q *HLMap) Worldspawn() *Entity {
+	return q.worldspawn
+}
+
 func PrintHLMap(q *HLMap) {
 	for _, entity := range q.Entitylist {
-		fmt.Println("ENTITY")
+		fmt.Printf("ENTITY @ %p\n", entity)
 		for k, v := range entity.Properties {
 			fmt.Printf("\t%v : %v\n", k, v)
 		}
 		for _, brush := range entity.Brushlist {
-			fmt.Println("\tBRUSH")
+			fmt.Printf("\tBRUSH @ %p\n", brush)
 			for _, face := range brush.Facelist {
 				/*
 					fmt.Println("\t\tFACE")
@@ -146,5 +225,9 @@ func PrintHLMap(q *HLMap) {
 				fmt.Printf("\t\t\t( %v %v %v ) ( %v %v %v ) ( %v %v %v ) %v [ %v %v %v %v ] [ %v %v %v %v ] %v %v %v\n", face.X1, face.Y1, face.Z1, face.X2, face.Y2, face.Z2, face.X3, face.Y3, face.Z3, face.Texname, face.TX1.FloatString(6), face.TY1.FloatString(6), face.TZ1.FloatString(6), face.TOffset1, face.TX2.FloatString(6), face.TY2.FloatString(6), face.TZ2.FloatString(6), face.TOffset2, face.Rot.FloatString(2), face.ScaleX.FloatString(2), face.ScaleY.FloatString(2))
 			}
 		}
+	}
+	ws := q.Worldspawn()
+	if ws != nil {
+		fmt.Printf("Worldspawn identified as ENTITY @ %p\n", ws)
 	}
 }
