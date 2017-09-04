@@ -31,6 +31,12 @@ func (f *Face) Shift(dx, dy, dz int) {
 	f.Z3 += dz
 }
 
+func (f *Face) Copy() *Face {
+	new_face := new(Face)
+	*new_face = *f
+	return new_face
+}
+
 // ---------- Brush class definition ----------
 
 type Brush struct {
@@ -41,6 +47,16 @@ func (b *Brush) Shift(dx, dy, dz int) {
 	for _, f := range b.Facelist {
 		f.Shift(dx, dy, dz)
 	}
+}
+
+func (b *Brush) Copy() *Brush {
+	new_brush := new(Brush)
+
+	for _, face := range b.Facelist {
+		new_brush.Facelist = append(new_brush.Facelist, face.Copy())
+	}
+
+	return new_brush
 }
 
 // ---------- Entity class definition ----------
@@ -56,6 +72,21 @@ func (e *Entity) Shift(dx, dy, dz int) {
 	}
 }
 
+func (e *Entity) Copy() *Entity {
+	new_entity := new(Entity)
+	new_entity.Properties = make(map[string]string)
+
+	for k, v := range e.Properties {
+		new_entity.Properties[k] = v
+	}
+
+	for _, brush := range e.Brushlist {
+		new_entity.Brushlist = append(new_entity.Brushlist, brush.Copy())
+	}
+
+	return new_entity
+}
+
 // ---------- HLMap class definition ----------
 
 type HLMap struct {
@@ -66,6 +97,16 @@ func (q *HLMap) Shift(dx, dy, dz int) {
 	for _, e := range q.Entitylist {
 		e.Shift(dx, dy, dz)
 	}
+}
+
+func (q *HLMap) Copy() *HLMap {
+	new_hlmap := new(HLMap)
+
+	for _, entity := range q.Entitylist {
+		new_hlmap.Entitylist = append(new_hlmap.Entitylist, entity.Copy())
+	}
+
+	return new_hlmap
 }
 
 func PrintHLMap(q *HLMap) {
