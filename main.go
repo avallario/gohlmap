@@ -3,9 +3,7 @@
 package main
 
 import (
-	"fmt"
 	"github.com/avallario/gohlmap/mapio"
-	"github.com/avallario/gohlmap/maptree"
 	"os"
 )
 
@@ -16,8 +14,6 @@ func check(e error) {
 }
 
 func main() {
-	fmt.Println("OK Good luck test!")
-
 	f, err := os.Open("testinput.map")
 	defer f.Close()
 	check(err)
@@ -27,7 +23,11 @@ func main() {
 
 	hlmap := parser.Parse()
 
-	maptree.PrintHLMap(hlmap)
+	hlmap.Shift(0, 0, 320)
+
+	mapio.ExportMap(hlmap, "output.map")
+
+	//	maptree.PrintHLMap(hlmap)
 
 	/*
 		t := mapio.Token{-1, "Token init"}
