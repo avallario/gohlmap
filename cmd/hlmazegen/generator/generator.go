@@ -1,4 +1,4 @@
-package hlmazegen
+package generator
 
 type MazeCell struct {
 	N, S, E, W bool
