@@ -68,7 +68,7 @@ func GenerateMap(maze [][]*MazeCell) *maptree.HLMap {
 	player_start.Properties = make(map[string]string)
 	player_start.Properties["classname"] = "info_player_start"
 	player_start.Properties["angles"] = "0 0 0"
-	player_start.Properties["origin"] = strconv.FormatInt(WEST_BOUNDARY+CELL_SIZE/2, 10) + " " + strconv.FormatInt(SOUTH_BOUNDARY+CELL_SIZE/2, 10) + " 40"
+	player_start.Properties["origin"] = strconv.Itoa(WEST_BOUNDARY+CELL_SIZE/2) + " " + strconv.Itoa(SOUTH_BOUNDARY+CELL_SIZE/2) + " 40"
 	hlmap.Entitylist = append(hlmap.Entitylist, player_start)
 
 	return hlmap
