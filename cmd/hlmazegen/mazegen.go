@@ -15,6 +15,8 @@ func check(e error) {
 }
 
 func main() {
+	output_filename := "maze"
+
 	rand.Seed(time.Now().UnixNano())
 	hlmap := generator.GenerateMap(generator.GenerateMaze(20, 20))
 	mapio.ExportMap(hlmap, "output.map")
@@ -30,4 +32,8 @@ func main() {
 	vis_cmd := exec.Command("hlvis", "output.map")
 	vis_err := vis_cmd.Run()
 	check(vis_err)
+
+	ren_cmd := exec.Command("cleanup.bat", output_filename+".bsp")
+	ren_err := ren_cmd.Run()
+	check(ren_err)
 }
