@@ -5,7 +5,7 @@
 "newunit" "1"
 "scversion2" "514"
 "mapversion" "220"
-"wad" "\steamlibrary\steamapps\common\sven co-op sdk\mapping\wad\decals.wad;\steamlibrary\steamapps\common\sven co-op sdk\mapping\wad\halflife.wad;\steamlibrary\steamapps\common\sven co-op sdk\mapping\wad\liquids.wad;\steamlibrary\steamapps\common\sven co-op sdk\mapping\wad\xeno.wad;\steamlibrary\steamapps\common\sven co-op sdk\mapping\wad\zhlt.wad"
+"wad" " "
 {
 ( 240.00000000 256.00000000 128.00000000 ) ( 256.00000000 256.00000000 128.00000000 ) ( 256.00000000 240.00000000 128.00000000 ) FIFTIES_WALL14 [ 1 0 0 0 ] [ 0 -1 0 0 ] 0 1 1 
 ( 240.00000000 240.00000000 0.00000000 ) ( 256.00000000 240.00000000 0.00000000 ) ( 256.00000000 256.00000000 0.00000000 ) FIFTIES_WALL14 [ 1 0 0 0 ] [ 0 -1 0 0 ] 0 1 1 
