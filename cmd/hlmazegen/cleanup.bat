@@ -8,4 +8,4 @@ del output.pts
 del output.log
 del output.wic
 del %1
-ren output.bsp maze.bsp
+ren output.bsp %1
