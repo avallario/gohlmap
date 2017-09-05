@@ -9,6 +9,6 @@ import (
 
 func main() {
 	rand.Seed(time.Now().UnixNano())
-	hlmap := generator.GenerateMap(generator.GenerateMaze(10, 10))
+	hlmap := generator.GenerateMap(generator.GenerateMaze(20, 20))
 	mapio.ExportMap(hlmap, "output.map")
 }

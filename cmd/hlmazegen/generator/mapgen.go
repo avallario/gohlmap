@@ -3,12 +3,13 @@ package generator
 import (
 	"github.com/avallario/gohlmap/mapio"
 	"github.com/avallario/gohlmap/maptree"
+	"strconv"
 )
 
 const (
 	CELL_SIZE      = 256
-	SOUTH_BOUNDARY = 0
-	WEST_BOUNDARY  = 0
+	SOUTH_BOUNDARY = -2560
+	WEST_BOUNDARY  = -2560
 )
 
 func check(e error) {
@@ -62,6 +63,13 @@ func GenerateMap(maze [][]*MazeCell) *maptree.HLMap {
 			hlmap.Worldspawn().Brushlist = append(hlmap.Worldspawn().Brushlist, new_cell.Worldspawn().Brushlist...)
 		}
 	}
+
+	player_start := new(maptree.Entity)
+	player_start.Properties = make(map[string]string)
+	player_start.Properties["classname"] = "info_player_start"
+	player_start.Properties["angles"] = "0 0 0"
+	player_start.Properties["origin"] = strconv.FormatInt(WEST_BOUNDARY+CELL_SIZE/2, 10) + " " + strconv.FormatInt(SOUTH_BOUNDARY+CELL_SIZE/2, 10) + " 40"
+	hlmap.Entitylist = append(hlmap.Entitylist, player_start)
 
 	return hlmap
 }
