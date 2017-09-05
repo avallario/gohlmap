@@ -14,12 +14,6 @@ func (p parseError) Error() string {
 	return "Parsing error: " + p.msg
 }
 
-func check(e error) {
-	if e != nil {
-		panic(e)
-	}
-}
-
 type parser struct {
 	input         *scanner
 	current_token Token

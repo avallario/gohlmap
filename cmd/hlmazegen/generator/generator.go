@@ -39,23 +39,31 @@ func GenerateMaze(w, h int) [][]*MazeCell {
 	var finders []*pathFinder
 	finders = append(finders, new(pathFinder))
 
-	for len(finders) > 0 {
+	for livingFinders(finders) {
 		var new_finders []*pathFinder
 
-		for i, f := range finders {
-			new_finder := f.act(maze)
-			if new_finder != nil {
-				new_finders = append(new_finders, new_finder)
+		for _, f := range finders {
+			if !f.dead {
+				new_finder := f.act(maze)
+				if new_finder != nil {
+					new_finders = append(new_finders, new_finder)
+				}
 			}
 		}
 
-		for i, f := range finders {
-			if f.dead {
-				copy(finders[i:], finders[i+1:])
-				finders[len(finders)-1] = nil
-				finders = finders[:len(finders)-1]
+		/*
+			tmp := make([]*pathFinder, len(finders))
+			copy(tmp, finders)
+			for i, f := range finders {
+				if f.dead {
+					copy(tmp[i:], tmp[i+1:])
+					tmp[len(tmp)-1] = nil
+					tmp = tmp[:len(tmp)-1]
+				}
 			}
-		}
+			finders = make([]*pathFinder, len(tmp))
+			copy(finders, tmp)
+		*/
 
 		finders = append(new_finders, finders...)
 	}
@@ -82,7 +90,7 @@ func (p *pathFinder) act(maze [][]*MazeCell) *pathFinder {
 				if p.y < max_y && !maze[p.x][p.y+1].visited {
 					maze[p.x][p.y].N = false
 					maze[p.x][p.y+1].S = false
-					maze[p.x][p.y+1].visited
+					maze[p.x][p.y+1].visited = true
 					p.y++
 					acted = true
 				}
@@ -134,4 +142,13 @@ func (p *pathFinder) act(maze [][]*MazeCell) *pathFinder {
 
 	p.dead = true
 	return nil
+}
+
+func livingFinders(finders []*pathFinder) bool {
+	for _, f := range finders {
+		if !f.dead {
+			return true
+		}
+	}
+	return false
 }
