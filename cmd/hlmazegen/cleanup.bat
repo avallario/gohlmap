@@ -7,5 +7,6 @@ del output.prt
 del output.pts
 del output.log
 del output.wic
+del output.map
 del %1
 ren output.bsp %1

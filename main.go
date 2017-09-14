@@ -24,14 +24,6 @@ func main() {
 
 	hlmap := parser.Parse()
 
-	entity, err2 := hlmap.FindEntityNamed("rail")
-	check(err2)
-
-	err3 := hlmap.MoveEntityToWorld(entity)
-	check(err3)
-
-	//	hlmap.Shift(0, 0, 320)
-
 	mapio.ExportMap(hlmap, "output.map")
 
 	maptree.PrintHLMap(hlmap)

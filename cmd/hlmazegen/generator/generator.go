@@ -51,20 +51,6 @@ func GenerateMaze(w, h int) [][]*MazeCell {
 			}
 		}
 
-		/*
-			tmp := make([]*pathFinder, len(finders))
-			copy(tmp, finders)
-			for i, f := range finders {
-				if f.dead {
-					copy(tmp[i:], tmp[i+1:])
-					tmp[len(tmp)-1] = nil
-					tmp = tmp[:len(tmp)-1]
-				}
-			}
-			finders = make([]*pathFinder, len(tmp))
-			copy(finders, tmp)
-		*/
-
 		finders = append(new_finders, finders...)
 	}
 
